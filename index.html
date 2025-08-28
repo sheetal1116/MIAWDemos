@@ -3,103 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Salesforce Messaging Portal</title>
+  <title>Salesforce Messaging Chat Portal</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f6f9;
       margin: 0;
+      padding: 0;
+      background: #f4f6f9;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      justify-content: flex-start;
+      min-height: 100vh;
     }
-
-    .form-container {
-      background: #fff;
-      border: 2px solid #0070d2;
-      border-radius: 12px;
-      padding: 2rem;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: #0070d2;
-    }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 1rem;
-    }
-
-    input {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    button {
-      margin-top: 1.5rem;
-      width: 100%;
-      padding: 0.75rem;
+    header {
       background: #0070d2;
-      border: none;
-      color: #fff;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
+      color: white;
+      padding: 1rem;
+      width: 100%;
+      text-align: center;
+      font-size: 1.2rem;
     }
-
-    button:hover {
-      background: #005bb5;
+    main {
+      flex: 1;
+      padding: 2rem;
+      text-align: center;
+    }
+    footer {
+      background: #f1f1f1;
+      padding: 1rem;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>Start a Chat</h2>
-    <form id="preChatForm">
-      <label for="firstName">First Name</label>
-      <input type="text" id="firstName" name="firstName" required />
+  <header>
+    🚀 Web Portal with Salesforce Lightning Messaging
+  </header>
 
-      <label for="lastName">Last Name</label>
-      <input type="text" id="lastName" name="lastName" required />
+  <main>
+    <p>Welcome! Use the chat widget below to connect with us.</p>
+  </main>
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required />
+  <footer>
+    &copy; 2025 My Company
+  </footer>
 
-      <label for="phone">Phone</label>
-      <input type="tel" id="phone" name="phone" required />
+  <!-- 🔽 Paste your Salesforce Embedded Service Messaging Script here -->
+  <script type='text/javascript'>
+	function initEmbeddedMessaging() {
+		try {
+			embeddedservice_bootstrap.settings.language = 'en_US'; // For example, enter 'en' or 'en-US'
 
-      <button type="submit">START CHAT</button>
-    </form>
-  </div>
+			embeddedservice_bootstrap.init(
+				'00DgL000005gm3l',
+				'TheDemoServiceDeployment',
+				'https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339',
+				{
+					scrt2URL: 'https://orgfarm-bed2990021-dev-ed.develop.my.salesforce-scrt.com'
+				}
+			);
+		} catch (err) {
+			console.error('Error loading Embedded Messaging: ', err);
+		}
+	};
+</script>
+<script type='text/javascript' src='https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 
-  <script>
-    document.getElementById('preChatForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      // Collect form data
-      const firstName = document.getElementById('firstName').value;
-      const lastName  = document.getElementById('lastName').value;
-      const email     = document.getElementById('email').value;
-      const phone     = document.getElementById('phone').value;
-
-      // Store data in sessionStorage so chat.html can access it
-      sessionStorage.setItem('preChatData', JSON.stringify({
-        firstName, lastName, email, phone
-      }));
-
-      // Open chat window
-      window.location.href = 'chat.html';
-    });
-  </script>
 </body>
 </html>
