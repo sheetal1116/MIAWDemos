@@ -1,130 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat Window</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat Window</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
 
-        .chat-container {
-            background: #fff;
-            border: 2px solid #0070d2;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 600px;
-            height: 80vh;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-        }
+    .chat-container {
+      background: #fff;
+      border: 2px solid #0070d2;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 600px;
+      height: 80vh;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
 
-        header {
-            background: #0070d2;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            border-radius: 12px 12px 0 0;
-        }
+    header {
+      background: #0070d2;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 12px 12px 0 0;
+    }
 
-        #chatArea {
-            flex: 1;
-            padding: 1rem;
-            overflow-y: auto;
-        }
-    </style>
+    #chatArea {
+      flex: 1;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+  </style>
 </head>
-
 <body>
-    <div class="chat-container">
-        <header>
-            💬 Portal Chat
-        </header>
-        <div id="chatArea">
-            <p>Loading chat...</p>
-        </div>
+  <div class="chat-container">
+    <header>
+      💬 Portal Chat
+    </header>
+    <div id="chatArea">
+      <p>Loading chat...</p>
     </div>
+  </div>
 
-    <!-- 🔽 Salesforce Embedded Service Script goes here -->
-    <script type='text/javascript'>
-        // Example only — replace with your actual snippet from Salesforce
-        // window.embedded_svc.settings.prepopulatedPrechatFields = {
-        //   FirstName: "John",
-        //   LastName: "Doe",
-        //   Email: "john@example.com",
-        //   Phone: "1234567890"
-        // };
+  <!-- 🔽 Salesforce Embedded Service Script goes here -->
+  <script type='text/javascript'>
+    // Example only — replace with your actual snippet from Salesforce
+    // window.embedded_svc.settings.prepopulatedPrechatFields = {
+    //   FirstName: "John",
+    //   LastName: "Doe",
+    //   Email: "john@example.com",
+    //   Phone: "1234567890"
+    // };
 
-        // window.embedded_svc.init(
-        //   'https://YOUR_INSTANCE.salesforce.com',
-        //   'https://YOUR_DEPLOYMENT_DOMAIN',
-        //   'deploymentId',
-        //   'orgId',
-        //   'buttonId',
-        //   { baseLiveAgentContentURL: '...', deploymentId: '...', buttonId: '...', baseLiveAgentURL: '...', eswLiveAgentDevName: '...', isOfflineSupportEnabled: false }
-        // );
-    </script>
-    <script type='text/javascript'>
-        function initEmbeddedMessaging() {
-            try {
-                embeddedservice_bootstrap.settings.language = 'en_US'; // For example, enter 'en' or 'en-US'
-                window.addEventListener("onEmbeddedMessagingReady", e => {
-                    embeddedservice_bootstrap.prechatAPI.setVisiblePrechatFields({
-                        "FirstName": {
-                            "value": "Test",
-                            "isEditableByEndUser": true
-                        },
-                        "LastName": {
-                            "value": "User",
-                            "isEditableByEndUser": true
-                        },
-                        "Email": {
-                            "value": "test.user@test.com",
-                            "isEditableByEndUser": true
-                        },
-                        "Phone": {
-                            "value": "64733838322",
-                            "isEditableByEndUser": true
-                        }
-                    });
-                });
+    // window.embedded_svc.init(
+    //   'https://YOUR_INSTANCE.salesforce.com',
+    //   'https://YOUR_DEPLOYMENT_DOMAIN',
+    //   'deploymentId',
+    //   'orgId',
+    //   'buttonId',
+    //   { baseLiveAgentContentURL: '...', deploymentId: '...', buttonId: '...', baseLiveAgentURL: '...', eswLiveAgentDevName: '...', isOfflineSupportEnabled: false }
+    // );
+  </script>
 
-                embeddedservice_bootstrap.init(
-                    '00DgL000005gm3l',
-                    'TheDemoServiceDeployment',
-                    'https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339',
-                    {
-                        scrt2URL: 'https://orgfarm-bed2990021-dev-ed.develop.my.salesforce-scrt.com'
-                    }
-                );
-            } catch (err) {
-                console.error('Error loading Embedded Messaging: ', err);
-            }
-        };
-    </script>
-    <script type='text/javascript'
-        src='https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339/assets/js/bootstrap.min.js'
-        onload='initEmbeddedMessaging()'>
-    </script>
+  <script>
+    // Load pre-chat data into Salesforce snippet dynamically
+    const preChatData = JSON.parse(sessionStorage.getItem('preChatData') || '{}');
+    console.log("Pre-Chat Data:", preChatData);
 
-
-    <script>
-        // Load pre-chat data into Salesforce snippet dynamically
-        const preChatData = JSON.parse(sessionStorage.getItem('preChatData') || '{}');
-        console.log("Pre-Chat Data:", preChatData);
-
-        // Example of injecting into Salesforce pre-chat fields:
-        // window.embedded_svc.settings.prepopulatedPrechatFields = preChatData;
-    </script>
+    // Example of injecting into Salesforce pre-chat fields:
+    // window.embedded_svc.settings.prepopulatedPrechatFields = preChatData;
+  </script>
 </body>
-
 </html>
