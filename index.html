@@ -14,7 +14,6 @@
       justify-content: center;
       height: 100vh;
     }
-
     .form-container {
       background: #fff;
       border: 2px solid #0070d2;
@@ -24,42 +23,22 @@
       max-width: 400px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-
     h2 {
       text-align: center;
       margin-bottom: 1.5rem;
       color: #0070d2;
     }
-
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 1rem;
-    }
-
+    label { font-weight: bold; display: block; margin-top: 1rem; }
     input {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      width: 100%; padding: 0.5rem; margin-top: 0.25rem;
+      border: 1px solid #ccc; border-radius: 6px;
     }
-
     button {
-      margin-top: 1.5rem;
-      width: 100%;
-      padding: 0.75rem;
-      background: #0070d2;
-      border: none;
-      color: #fff;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
+      margin-top: 1.5rem; width: 100%; padding: 0.75rem;
+      background: #0070d2; border: none; color: #fff;
+      font-size: 1rem; border-radius: 8px; cursor: pointer;
     }
-
-    button:hover {
-      background: #005bb5;
-    }
+    button:hover { background: #005bb5; }
   </style>
 </head>
 <body>
@@ -67,14 +46,11 @@
     <h2>Start a Chat</h2>
     <form id="preChatForm">
       <label for="firstName">First Name</label>
-      <input type="text" id="firstName" name="firstName" required />
-
+      <input type="text" id="firstName" required />
       <label for="lastName">Last Name</label>
-      <input type="text" id="lastName" name="lastName" required />
-
+      <input type="text" id="lastName" required />
       <label for="email">Email</label>
-      <input type="email" id="email" name="email" required />
-
+      <input type="email" id="email" required />
       <button type="submit">START CHAT</button>
     </form>
   </div>
@@ -83,10 +59,7 @@
     function initEmbeddedMessaging() {
       try {
         embeddedservice_bootstrap.settings.language = 'en_US';
-
-        // Hide default button
-        embeddedservice_bootstrap.settings.hideChatButton = true;
-
+        embeddedservice_bootstrap.settings.displayHelpButton = false; // Hides chat bubble completely
         embeddedservice_bootstrap.init(
           '00DgL000005gm3l',
           'TheDemoServiceDeployment',
@@ -107,20 +80,18 @@
       const lastName = document.getElementById('lastName').value;
       const email = document.getElementById('email').value;
 
-      // Open new window for chat
+      // Open popup
       const chatWindow = window.open('', 'ChatWindow', 'width=400,height=600');
-
-      chatWindow.document.write('<html><head><title>Chat</title></head><body><h3>Loading chat...</h3></body></html>');
+      chatWindow.document.write('<html><head><title>Chat</title></head><body></body></html>');
 
       chatWindow.onload = () => {
-        // Inject script into new window
         const script = chatWindow.document.createElement('script');
         script.src = 'https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339/assets/js/bootstrap.min.js';
         script.onload = () => {
           chatWindow.initEmbeddedMessaging = function() {
             try {
               chatWindow.embeddedservice_bootstrap.settings.language = 'en_US';
-              chatWindow.embeddedservice_bootstrap.settings.hideChatButton = true;
+              chatWindow.embeddedservice_bootstrap.settings.displayHelpButton = false;
 
               chatWindow.embeddedservice_bootstrap.init(
                 '00DgL000005gm3l',
@@ -131,20 +102,19 @@
                 }
               );
 
-              // Wait for init then set prechat fields
-              chatWindow.embeddedservice_bootstrap.addEventHandler('afterMaximize', () => {
+              chatWindow.embeddedservice_bootstrap.addEventHandler('onEmbeddedMessagingReady', () => {
                 chatWindow.embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
                   FirstName: firstName,
                   LastName: lastName,
                   Email: email
                 });
+
+                // Launch chat automatically
+                chatWindow.embeddedservice_bootstrap.utilAPI.launchChat();
               });
 
-              // Launch chat
-              chatWindow.embeddedservice_bootstrap.utilAPI.launchChat();
-
             } catch (err) {
-              console.error('Error initializing chat in popup:', err);
+              console.error('Error initializing chat:', err);
             }
           };
           chatWindow.initEmbeddedMessaging();
