@@ -65,7 +65,7 @@
       const email = encodeURIComponent(document.getElementById("email").value);
 
       // Build the VF page URL with query params
-      const chatUrl = `/apex/MessagingWindow?firstName=${firstName}&lastName=${lastName}&email=${email}`;
+      const chatUrl = `https://orgfarm-bed2990021-dev-ed--c.develop.vf.force.com/apex/MessagingWindow?firstName=${firstName}&lastName=${lastName}&email=${email}`;
 
       // Open VF Messaging Window
       window.open(chatUrl, "ChatWindow", "width=420,height=650,resizable=yes");
