@@ -59,54 +59,16 @@
     document.getElementById("preChatForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const firstName = document.getElementById("firstName").value;
-      const lastName = document.getElementById("lastName").value;
-      const email = document.getElementById("email").value;
+      // Get user input
+      const firstName = encodeURIComponent(document.getElementById("firstName").value);
+      const lastName = encodeURIComponent(document.getElementById("lastName").value);
+      const email = encodeURIComponent(document.getElementById("email").value);
 
-      // Open chat popup
-      const chatWindow = window.open("", "ChatWindow", "width=420,height=650");
-      chatWindow.document.write("<html><head><title>Chat</title></head><body></body></html>");
+      // Build the VF page URL with query params
+      const chatUrl = `/apex/MessagingWindow?firstName=${firstName}&lastName=${lastName}&email=${email}`;
 
-      chatWindow.onload = () => {
-        const script = chatWindow.document.createElement("script");
-        script.src =
-          "https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339/assets/js/bootstrap.min.js";
-        script.onload = () => {
-          chatWindow.initEmbeddedMessaging = function () {
-            try {
-              chatWindow.embeddedservice_bootstrap.settings.language = "en_US";
-              chatWindow.embeddedservice_bootstrap.settings.displayHelpButton = false; // No chat bubble ever
-
-              chatWindow.embeddedservice_bootstrap.init(
-                "00DgL000005gm3l", // Org Id
-                "TheDemoServiceDeployment", // Deployment Name
-                "https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339", // URL
-                {
-                  scrt2URL:
-                    "https://orgfarm-bed2990021-dev-ed.develop.my.salesforce-scrt.com",
-                }
-              );
-
-              // When widget is ready, set prechat fields and launch
-              chatWindow.embeddedservice_bootstrap.addEventHandler(
-                "onEmbeddedMessagingReady",
-                () => {
-                  chatWindow.embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
-                    FirstName: firstName,
-                    LastName: lastName,
-                    Email: email,
-                  });
-                  chatWindow.embeddedservice_bootstrap.utilAPI.launchChat();
-                }
-              );
-            } catch (err) {
-              console.error("Error initializing Messaging:", err);
-            }
-          };
-          chatWindow.initEmbeddedMessaging();
-        };
-        chatWindow.document.body.appendChild(script);
-      };
+      // Open VF Messaging Window
+      window.open(chatUrl, "ChatWindow", "width=420,height=650,resizable=yes");
     });
   </script>
 </body>
