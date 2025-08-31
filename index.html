@@ -75,31 +75,85 @@
       <label for="email">Email</label>
       <input type="email" id="email" name="email" required />
 
-      <label for="phone">Phone</label>
-      <input type="tel" id="phone" name="phone" required />
-
       <button type="submit">START CHAT</button>
     </form>
   </div>
 
-  <script>
+  <script type='text/javascript'>
+    function initEmbeddedMessaging() {
+      try {
+        embeddedservice_bootstrap.settings.language = 'en_US';
+
+        // Hide default button
+        embeddedservice_bootstrap.settings.hideChatButton = true;
+
+        embeddedservice_bootstrap.init(
+          '00DgL000005gm3l',
+          'TheDemoServiceDeployment',
+          'https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339',
+          {
+            scrt2URL: 'https://orgfarm-bed2990021-dev-ed.develop.my.salesforce-scrt.com'
+          }
+        );
+      } catch (err) {
+        console.error('Error loading Embedded Messaging: ', err);
+      }
+    }
+
     document.getElementById('preChatForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      // Collect form data
       const firstName = document.getElementById('firstName').value;
-      const lastName  = document.getElementById('lastName').value;
-      const email     = document.getElementById('email').value;
-      const phone     = document.getElementById('phone').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = document.getElementById('email').value;
 
-      // Store data in sessionStorage so chat.html can access it
-      sessionStorage.setItem('preChatData', JSON.stringify({
-        firstName, lastName, email, phone
-      }));
+      // Open new window for chat
+      const chatWindow = window.open('', 'ChatWindow', 'width=400,height=600');
 
-      // Open chat window
-      window.location.href = 'chat.html';
+      chatWindow.document.write('<html><head><title>Chat</title></head><body><h3>Loading chat...</h3></body></html>');
+
+      chatWindow.onload = () => {
+        // Inject script into new window
+        const script = chatWindow.document.createElement('script');
+        script.src = 'https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339/assets/js/bootstrap.min.js';
+        script.onload = () => {
+          chatWindow.initEmbeddedMessaging = function() {
+            try {
+              chatWindow.embeddedservice_bootstrap.settings.language = 'en_US';
+              chatWindow.embeddedservice_bootstrap.settings.hideChatButton = true;
+
+              chatWindow.embeddedservice_bootstrap.init(
+                '00DgL000005gm3l',
+                'TheDemoServiceDeployment',
+                'https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339',
+                {
+                  scrt2URL: 'https://orgfarm-bed2990021-dev-ed.develop.my.salesforce-scrt.com'
+                }
+              );
+
+              // Wait for init then set prechat fields
+              chatWindow.embeddedservice_bootstrap.addEventHandler('afterMaximize', () => {
+                chatWindow.embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
+                  FirstName: firstName,
+                  LastName: lastName,
+                  Email: email
+                });
+              });
+
+              // Launch chat
+              chatWindow.embeddedservice_bootstrap.utilAPI.launchChat();
+
+            } catch (err) {
+              console.error('Error initializing chat in popup:', err);
+            }
+          };
+          chatWindow.initEmbeddedMessaging();
+        };
+        chatWindow.document.body.appendChild(script);
+      };
     });
   </script>
+
+  <script type='text/javascript' src='https://orgfarm-bed2990021-dev-ed.develop.my.site.com/ESWTheDemoServiceDeployme1756413030339/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
 </body>
 </html>
